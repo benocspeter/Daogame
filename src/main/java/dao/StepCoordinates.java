@@ -1,10 +1,18 @@
 package dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The class for storing the coordinates which are used during steps.
  */
 public class StepCoordinates {
 	
+	
+	/**
+	 * The Logback logger of the <code>StepCoordinates</code> class.
+	 */
+	private static Logger logger = LoggerFactory.getLogger(StepCoordinates.class);
 	
 	/**
 	 * X coordinate of the disk to be moved.
@@ -44,6 +52,7 @@ public class StepCoordinates {
 	
 	public StepCoordinates(char fromX, char fromY, char toX,char toY) {
 		super();
+		logger.info("Creating StepCoordinates object.");
 		this.fromX = fromX -'0';
 		this.fromY = fromY -'0';
 		this.toX = toX -'0';

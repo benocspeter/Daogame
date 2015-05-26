@@ -3,45 +3,83 @@ package dao;
 import java.util.ArrayList;
 import java.util.Random;
 
-enum Player{
-	Blue,Red
-};
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+ 
 
 
 /**
- * The class of the Game model
+ * The class of the Game model.
  */
+ 
+
 public class Game {
-	private char[][] gameTable;
-	private Player playerOnTurn;
-	private boolean isGameOver;
 	
-	public Game() {
+	
+	
+	/**
+	 * The Logback logger of the <code>Game</code> class.
+	 */
+	private static Logger logger = LoggerFactory.getLogger(Game.class);
+	
+	/**
+	 * Board of the dao game.
+	 */
+	private char[][] gameTable;
+	
+	
+	/**
+	 *  {@code Player} object used for storing which player is on turn.
+	 */
+	private Player playerOnTurn;
+	 
+	 
+	/**
+	 * Constructor of this object.	  
+	 */
+	public Game() {		
 		super();
 		Random r = new Random();
 		int startPlayer = r.nextInt()%2;
-		if(startPlayer==0) playerOnTurn = Player.Red;
-		else playerOnTurn = Player.Blue;
-		playerOnTurn = Player.Red;
-		
-		
+		if(startPlayer==0) playerOnTurn = Player.RED;
+		else playerOnTurn = Player.BLUE;
+		  
 		this.gameTable = new char[4][4];
-		setGameTable();	
+		initGameTable();	
+		logger.info("Game object created");
 		
 	}
 
+	
+	/**
+	 * A method that executes a player step.
+	 * @param coord Coordinates for the step.
+	 * @return Returns true if the step was successful.
+	 */
 	public boolean step(StepCoordinates coord)
 	{
+		logger.info("Validating step.");
 	if(!isValidStep(coord)) return false;	
 		
 	char p=  gameTable[ coord.getFromX() ] [ coord.getFromY() ];
 	gameTable[ coord.getToX() ] [ coord.getToY() ] = p;	
 	gameTable[ coord.getFromX() ] [ coord.getFromY() ] = 'O';
+	
+	
+	logger.info("Successful player step.");
 	return true;
 	}
 	
+	
+	/**
+	 * A method that validates a player step.
+	 * @param coord Coordinates for the step.
+	 * @return Returns true if the player step is allowed.
+	 */
 	public boolean isValidStep(StepCoordinates coord)
 	{
+		
 		if(coord.getFromX() < 0 || coord.getFromX() > 3) return false;
 		if(coord.getFromY() < 0 || coord.getFromY() > 3) return false;
 		if(coord.getToX() < 0 || coord.getToX() > 3) return false;
@@ -51,7 +89,7 @@ public class Game {
 		char ownerOfField = gameTable[ coord.getFromX() ] [ coord.getFromY() ];
 		char playerOnTurnLabel = playerOnTurn.toString().toCharArray()[0];
 		if(ownerOfField != playerOnTurnLabel) return false;
-		System.out.println("#1");
+		 
 		
 		if( gameTable[ coord.getToX() ] [ coord.getToY() ] != 'O' ) return false;
 	
@@ -63,7 +101,7 @@ public class Game {
 					if(gameTable[coord.getFromX()][i] != 'O' && i != coord.getFromY()) return false;					
 				}
 			}
-			System.out.println("#2");
+			 
 			if(coord.getToY() == coord.getFromY() ) {
 				int min = Math.min(coord.getFromX(), coord.getToX());
 				int max = Math.max(coord.getFromX(), coord.getToX());
@@ -71,7 +109,7 @@ public class Game {
 					if(gameTable[i][coord.getFromY()] != 'O'  && i != coord.getFromX()) return false;					
 				}
 			}
-			System.out.println("#3");
+			 
 			if(   Math.abs(coord.getFromX() - coord.getToX()) == Math.abs(coord.getFromY() - coord.getToY()) ) {
 				
 				int signX = coord.getToX() - coord.getFromX();
@@ -85,12 +123,17 @@ public class Game {
 					if(gameTable[i][j] != 'O' && i!= coord.getFromX()) return false;
 				}				
 			}
-			System.out.println("#4");
+			 
 		return true;
 	}
 	
+	
+	/**
+	 * A method that checks if someone won the game.
+	 * @return Returns 'R' if they red player won, 'B' if the blue player won, and 'O' if there is no winner yet.
+	 */
 	public char winCheck(){
-		
+		logger.info("Checking if one of the player won.");
 		int numOfRed=0,numOfBlue=0;
 		for (int i = 0; i < gameTable.length; i++) {
 			for (int j = 0; j < gameTable.length; j++) {
@@ -122,6 +165,7 @@ public class Game {
 		
 		if(gameTable[0][0] =='B' && gameTable[3][3] =='B' && gameTable[0][3] =='B' && gameTable[3][0] =='B') return 'B';
 		if(gameTable[0][0] =='R' && gameTable[3][3] =='R' && gameTable[0][3] =='R' && gameTable[3][0] =='R') return 'R';
+		
 		
 		ArrayList<int[]> blueDisk = new ArrayList<int[]>();
 		ArrayList<int[]> redDisk = new ArrayList<int[]>();
@@ -174,15 +218,25 @@ public class Game {
 		return 'O';
 	}
 	
-	 
+	
+	
+	/**
+	 * A method that switches to the next player.
+	 */
 	public void nextPlayer()
 	{
-		if(playerOnTurn == Player.Blue) playerOnTurn = Player.Red;
-		else playerOnTurn = Player.Blue;
+		logger.info("Switching to the next player.");
+		if(playerOnTurn == Player.BLUE) playerOnTurn = Player.RED;
+		else playerOnTurn = Player.BLUE;
 	}
 	
-public void setGameTable()
+	
+	/**
+	 * A method that sets the initial game board.	
+	 */
+	public void initGameTable()
 	{		
+		logger.info("Setting initial game table.");
 		for (int i = 0; i < gameTable.length; i++) {
 			for (int j = 0; j < gameTable.length; j++) {
 				gameTable[i][j]='O';
@@ -198,9 +252,16 @@ public void setGameTable()
 		gameTable[2][1]='B';
 		gameTable[3][0]='B';
 	}
-
+	
+	
+	
+	
+	/**
+	 * A method that prints game data to the console.
+	 */
 	public void printGameData()
 	{
+		logger.info("Printing game data.");
 		for (int i = 0; i < gameTable.length; i++) {
 			for (int j = 0; j < gameTable.length; j++) {
 				System.out.print(gameTable[i][j] + " ");
@@ -209,5 +270,51 @@ public void setGameTable()
 		}
 		System.out.println(playerOnTurn + " player is on turn!");
 	}
+
+	/**
+	 * Returns the game board.
+	 * 
+	 * @return Returns the gameTable object.
+	 */
+	public char[][] getGameTable() {
+		return gameTable;
+	} 
+	
+	
+	/**
+	 * Returns which player is on turn.
+	 * 
+	 * @return Returns the playerOnTurn object.
+	 */
+	public Player getPlayerOnTurn() {
+		return playerOnTurn;
+	}
+
+
+	
+	
+	/**
+	 * Sets the player on turn to the parameter.
+	 * 
+	 * @param playerOnTurn
+	 *            The playerOnTurn object.
+	 */
+	public void setPlayerOnTurn(Player playerOnTurn) {
+		this.playerOnTurn = playerOnTurn;
+	}
+
+
+	/**
+	 * Sets the game board.
+	 * 
+	 * @param gameTable
+	 *            The game board.
+	 */
+	public void setGameTable(char[][] gameTable) {
+		this.gameTable = gameTable;
+	}
+ 
+	
+	
 
 }

@@ -59,13 +59,7 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>12.1.0.2</version>
-			<scope>runtime</scope>
-		</dependency>
+		</dependency> 
 	</dependencies>
 	<profiles>
 		<profile>
@@ -195,7 +189,15 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>				
+				<version>2.7</version>		
+				<configuration>
+					<instrumentation>
+						<excludes>
+							<exclude>dao/Player.class</exclude>
+							<exclude>dao/StepCoordinates.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>		
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -216,7 +218,15 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.7</version> 
+				<configuration>
+					<instrumentation>
+						<excludes>
+							<exclude>dao/Player.class</exclude>
+							<exclude>dao/StepCoordinates.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>
 				
 			</plugin>
 			<plugin>

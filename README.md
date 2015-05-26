@@ -1,2 +1,2 @@
 #DAOGAME
-A simple DAO game
+A simple DAO game without graphical user interface.
