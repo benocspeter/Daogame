@@ -12,7 +12,62 @@ import org.slf4j.LoggerFactory;
 /**
  * The class of the Game model.
  */
- 
+
+
+/**
+* <pre>
+* Description and example of some functionality of this class.* 
+* After we create a Game object. We have our game board set, and a random player is chosen as a starter.
+* 
+* 
+* We can use printGameData method to print the game board and the player currently on turn.
+* {@code
+* Game g = new Game();
+* g.printGameData();
+* }
+* 
+* 
+* 
+* We can use nextPlayer method to switch to the next player.
+* {@code
+* Game g = new Game();
+* g.nextPlayer();
+* }
+* 
+* 
+* 
+* Step method handles player steps. StepCoordinates four arguments are coordinates. First two number describes the disk to be moved, 
+* while the second two gives us the coordinate where to move the disk.  Returns a boolean.
+* {@code
+* Game g = new Game();
+* StepCoordinates s = new StepCoordinates('0','0','0','1');
+* g.printGameData();
+* g.step(s);
+* g.printGameData();
+* }
+* 
+* 
+* 
+* The isValidStep method validates if a player's step can be executed. This method is used within the step method in the game,
+* but can be used any time to check if a player step is possible in that game state. Returns a boolean.
+* {@code
+* Game g = new Game();
+* StepCoordinates s = new StepCoordinates('0','0','0','1');
+* System.out.println( g.isValidStep(s) ); 
+* }
+* 
+* 
+* 
+* The winCheck method decides if one of the player has won the game, returns a character. 'O' if nobody won, 'B' if blue player ,
+* and 'R' if the red player won.
+* {@code
+* Game g = new Game(); 
+* if(g.winCheck() =='B') System.out.println("Blue player won!");
+* }
+* 
+* </pre>
+*/
+
 
 public class Game {
 	
@@ -43,8 +98,7 @@ public class Game {
 		Random r = new Random();
 		int startPlayer = r.nextInt()%2;
 		if(startPlayer==0) playerOnTurn = Player.RED;
-		else playerOnTurn = Player.BLUE;
-		  
+		else playerOnTurn = Player.BLUE;		 
 		this.gameTable = new char[4][4];
 		initGameTable();	
 		logger.info("Game object created");
@@ -89,8 +143,7 @@ public class Game {
 		char ownerOfField = gameTable[ coord.getFromX() ] [ coord.getFromY() ];
 		char playerOnTurnLabel = playerOnTurn.toString().toCharArray()[0];
 		if(ownerOfField != playerOnTurnLabel) return false;
-		 
-		
+		  
 		if( gameTable[ coord.getToX() ] [ coord.getToY() ] != 'O' ) return false;
 	
 			
@@ -111,7 +164,7 @@ public class Game {
 			}
 			 
 			if(   Math.abs(coord.getFromX() - coord.getToX()) == Math.abs(coord.getFromY() - coord.getToY()) ) {
-				
+				 
 				int signX = coord.getToX() - coord.getFromX();
 				signX = signX/Math.abs(signX);				
 				int signY = coord.getToY() - coord.getFromY();
@@ -123,8 +176,12 @@ public class Game {
 					if(gameTable[i][j] != 'O' && i!= coord.getFromX()) return false;
 				}				
 			}
-			 
-		return true;
+			
+			if(  Math.abs(coord.getFromX() - coord.getToX()) == Math.abs(coord.getFromY() - coord.getToY()) || 
+					coord.getToY() == coord.getFromY() || coord.getToX() == coord.getFromX() ) return true;
+			else return false;
+				 
+			  
 	}
 	
 	

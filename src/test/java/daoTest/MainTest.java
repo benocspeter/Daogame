@@ -15,7 +15,7 @@ import dao.StepCoordinates;
  
 public class MainTest {
 	 private Game g;
-	 private Main m;
+	 
 	
 	@Before
 	public void Setup(){
@@ -41,14 +41,22 @@ public class MainTest {
 	
 	@Test
 	public void testPlayerSwitch() {
-		Player a = g.getPlayerOnTurn();
-		g.nextPlayer();		
-		Player b = g.getPlayerOnTurn();
+		g.setPlayerOnTurn(Player.RED); 
+		g.nextPlayer();
 		
-		boolean s = a == b;
-		assertEquals(false, s) ;
+		assertEquals(Player.BLUE, g.getPlayerOnTurn()) ;
 		
 	}
+	
+	public void testPlayerSwitch2() {
+		g.setPlayerOnTurn(Player.BLUE); 
+		g.nextPlayer();
+		
+		assertEquals(Player.RED, g.getPlayerOnTurn()) ;
+		
+		
+	}
+	
 	
 	@Test
 	public void testWinCheck1() {
@@ -149,7 +157,19 @@ public class MainTest {
 		g.setGameTable(state);
 		assertEquals('R',g.winCheck());
 	}	
-
+	@Test
+	public void testWinCheck8() {
+		char[][] state =
+			{
+			{'B','R','O','O'},
+			{'R','R','B','O'},
+			{'O','O','O','R'},
+			{'O','R','R','O'}				
+			};		
+	
+		g.setGameTable(state);
+		assertEquals('B',g.winCheck());
+	}	
 
 	@Test
 	public void testStep() {
@@ -225,26 +245,212 @@ public class MainTest {
 	}	
 	
 	@Test
+	public void testStepValidation() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '0', '0');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	@Test
+	public void testStepValidation2() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '0', '2');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation3() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '3', '1');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation4() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '2', '2');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation5() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '1', '1');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	public void testStepValidation6() {
+		g.setPlayerOnTurn(Player.RED);
+		 
+		StepCoordinates s = new StepCoordinates('5','6', '0', '0');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	
+	public void testStepValidation7() {
+		g.setPlayerOnTurn(Player.RED);
+		 
+		StepCoordinates s = new StepCoordinates('0','0', '5', '5');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation8() {
+		g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('1','1', '3', '3');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation9() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','B','O','O'},
+			{'O','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '0', '3');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation10() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'B','B','O','O'},
+			{'B','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '3', '0');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	
+	@Test
+	public void testStepValidation11() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '3', '3');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	@Test
+	public void testStepValidation12() {
+		 g.setPlayerOnTurn(Player.RED);
+		char[][] state =
+			{
+			{'R','O','O','O'},
+			{'O','B','O','O'},
+			{'O','O','O','O'},
+			{'O','O','O','O'}				
+			};		
+	 
+		g.setGameTable(state);
+		StepCoordinates s = new StepCoordinates('0','0', '3', '1');		 
+		assertEquals(false, g.isValidStep(s)); 
+	}	
+	
+	
+	@Test
 	public void testUserInputFormat() {
 		 String s ="(0,0)-(2,2)";
-		assertEquals(true,m.checkFormat(s.toCharArray()));
+		assertEquals(true,Main.checkFormat(s.toCharArray()));
 	}	
 	@Test
 	public void testUserInputFormat2() {
 		 String s ="(3,0)-(0,2)";
-		assertEquals(true,m.checkFormat(s.toCharArray()));
+		assertEquals(true,Main.checkFormat(s.toCharArray()));
 	}	
 	
 	@Test
 	public void testUserInputFormat3() {
 		 String s ="(10,10)-(2,2)";
-		assertEquals(false,m.checkFormat(s.toCharArray()));
+		assertEquals(false,Main.checkFormat(s.toCharArray()));
 	}	
 	
 	@Test
 	public void testUserInputFormat4() {
 		 String s ="(0,0)(2,2)";
-		assertEquals(false,m.checkFormat(s.toCharArray()));
+		assertEquals(false,Main.checkFormat(s.toCharArray()));
 	}	
-
+	
+	@Test
+	public void testUserInputFormat5() {
+		 String s ="0,0,2,2";
+		assertEquals(false,Main.checkFormat(s.toCharArray()));
+	}
+	@Test
+	public void testUserInputFormat6() {
+		 String s ="(x,y)(d,g)";
+		assertEquals(false,Main.checkFormat(s.toCharArray()));
+	}
 }
